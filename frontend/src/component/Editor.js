@@ -60,11 +60,24 @@ const Editor = () => {
     if (!socket || !quill){
       return
     }
+    const handleChange = (delta) => {
+      quill.updateContents(delta)
+      console.log("jh");
+    }
+    socket && socket.on('receive-changes', handleChange);
+    return ()=>{
+      socket && socket.off('receive-changes', handleChange);
+    }
+  },[quill,socket])
+
+  useEffect(()=>{
+    if (!socket || !quill){
+      return
+    }
     const handleChange = (delta, oldDelta, source) => {
       if (source !== 'user') {
         return
       }
-      console.log(delta, oldDelta, source,"::")
       socket && socket.emit('send-changes',delta);
     }
     quill && quill.on('text-change', handleChange);
