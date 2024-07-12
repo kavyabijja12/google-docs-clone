@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box } from '@mui/material';
 import Quill from "quill";
 // Importing styles
@@ -31,25 +31,47 @@ const toolbarOptions = [
   ];
 
 const Editor = () => {
+  const [socket, setSocket] = useState();
+  const [quill, setQuill] = useState();
+
   useEffect(() => {
     // Check if Quill is already initialized
     if (!document.querySelector('.ql-toolbar')) {
-      const quillEditor = new Quill('#quill-editor', {
+      const quillServer = new Quill('#quill-editor', {
         theme: "snow",modules: {
             toolbar: toolbarOptions
           }
         
       });
+      setQuill(quillServer);
     }
   }, []);
 
   useEffect(()=>{
-    const socket = io('http://localhost:9000/');
+    const socketServer = io('http://localhost:9000');
+    setSocket(socketServer);
 
     return () => {
-      socket.disconnect();
+      socketServer.disconnect();
     }
-  })
+  },[])
+
+  useEffect(()=>{
+    if (!socket || !quill){
+      return
+    }
+    const handleChange = (delta, oldDelta, source) => {
+      if (source !== 'user') {
+        return
+      }
+      console.log(delta, oldDelta, source,"::")
+      socket && socket.emit('send-changes',delta);
+    }
+    quill && quill.on('text-change', handleChange);
+    return ()=>{
+      quill && quill.off('text-change', handleChange);
+    }
+  },[quill,socket])
 
   return (
     <Component>

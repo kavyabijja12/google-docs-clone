@@ -9,5 +9,8 @@ const io = new Server(PORT,{
 });
 
 io.on('connection',socket => {
+    socket.on('send-changes',delta =>{
+        console.log(delta);
+    });
     console.log('connected');
 });
