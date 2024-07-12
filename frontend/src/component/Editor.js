@@ -4,6 +4,7 @@ import Quill from "quill";
 // Importing styles
 import "quill/dist/quill.snow.css";
 import styled from '@emotion/styled';
+import {io} from 'socket.io-client'
 
 const Component = styled.div`
 background : #F5F5F5;`
@@ -41,6 +42,14 @@ const Editor = () => {
       });
     }
   }, []);
+
+  useEffect(()=>{
+    const socket = io('http://localhost:9000/');
+
+    return () => {
+      socket.disconnect();
+    }
+  })
 
   return (
     <Component>
