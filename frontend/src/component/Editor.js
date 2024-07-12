@@ -61,7 +61,7 @@ const Editor = () => {
       return
     }
     const handleChange = (delta) => {
-      quill.updateContents(delta)
+      quill.updateContents(delta);
       console.log("jh");
     }
     socket && socket.on('receive-changes', handleChange);

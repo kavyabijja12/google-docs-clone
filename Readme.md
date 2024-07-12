@@ -8,6 +8,8 @@ Basic Google Clone application with text editor and real time editing/viewing wi
 - Used styled to add css styling on top of Material UI components
 - styled is only applicable on MUI components
 - The return in useEffect is a cleanup function for any event listeners and such that should be turned off after the effect runs to prevent leaks. If you're not setting event listeners, canceling asynchronous requests or you don't have any resources to clean up then you don't need anything in the return. You should put your code/function calls before the return function.
+- new ids are generated using react - uuid
+
 
 ### backend
 - "type": "module" added to json file to import and export packages 
