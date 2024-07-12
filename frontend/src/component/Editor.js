@@ -3,6 +3,10 @@ import { Box } from '@mui/material';
 import Quill from "quill";
 // Importing styles
 import "quill/dist/quill.snow.css";
+import styled from '@emotion/styled';
+
+const Component = styled.div`
+background : #F5F5F5;`
 
 const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -39,7 +43,9 @@ const Editor = () => {
   }, []);
 
   return (
-        <Box id='quill-editor'></Box>
+    <Component>
+        <Box className = 'container' id='quill-editor'></Box>
+    </Component>
   );
 }
 export default Editor;
