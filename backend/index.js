@@ -1,5 +1,7 @@
 import { Server } from "socket.io";
+import Connection from "./database/db.js";
 
+Connection();
 const PORT = 9000;
 const io = new Server(PORT,{
     cors: {
@@ -9,8 +11,13 @@ const io = new Server(PORT,{
 });
 
 io.on('connection',socket => {
-    socket.on('send-changes',delta =>{
-        socket.broadcast.emit('receive-changes',delta)
-    });
+    socket.on('get-document',documentId =>{
+        const data = "";
+        socket.join(documentId);
+        socket.emit('load-document',data);
+        socket.on('send-changes',delta =>{
+            socket.broadcast.to(documentId).emit('receive-changes',delta)
+        });
+    })
     console.log('connected');
 });

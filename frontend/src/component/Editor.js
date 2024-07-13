@@ -5,6 +5,7 @@ import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import styled from '@emotion/styled';
 import {io} from 'socket.io-client'
+import { useParams } from "react-router-dom";
 
 const Component = styled.div`
 background : #F5F5F5;`
@@ -33,6 +34,7 @@ const toolbarOptions = [
 const Editor = () => {
   const [socket, setSocket] = useState();
   const [quill, setQuill] = useState();
+  const {id} = useParams();
 
   useEffect(() => {
     // Check if Quill is already initialized
@@ -43,6 +45,8 @@ const Editor = () => {
           }
         
       });
+      quillServer.disable();
+      quillServer.setText('Loading the Document...')
       setQuill(quillServer);
     }
   }, []);
@@ -54,7 +58,7 @@ const Editor = () => {
     return () => {
       socketServer.disconnect();
     }
-  },[])
+  },[]);
 
   useEffect(()=>{
     if (!socket || !quill){
@@ -62,13 +66,12 @@ const Editor = () => {
     }
     const handleChange = (delta) => {
       quill.updateContents(delta);
-      console.log("jh");
     }
     socket && socket.on('receive-changes', handleChange);
     return ()=>{
       socket && socket.off('receive-changes', handleChange);
     }
-  },[quill,socket])
+  },[quill,socket]);
 
   useEffect(()=>{
     if (!socket || !quill){
@@ -84,7 +87,18 @@ const Editor = () => {
     return ()=>{
       quill && quill.off('text-change', handleChange);
     }
-  },[quill,socket])
+  },[quill,socket]);
+
+  useEffect(()=>{
+    if (!socket || !quill){
+      return;
+    }
+    socket && socket.once('load-document',document=>{
+      quill && quill.setContents(document);
+      quill.enable();
+    })
+    socket && socket.emit('get-document',id);
+  },[quill,socket,id]);
 
   return (
     <Component>
