@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: dbuser
+      MONGO_INITDB_ROOT_PASSWORD: dbpassword
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    image: docsbackend:latest
+    container_name: backend
+    restart: always
+    environment:
+      MONGO_URL: "mongodb://dbuser:dbpassword@mongodb:27017"
+    ports:
+      - "5555:5555"
+    depends_on:
+      - mongodb
+
+  frontend:
+    image: docsfrontend:latest
+    container_name: frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
