@@ -2,7 +2,7 @@ FROM node:20 as build-step
 
 WORKDIR /app
 
-COPY ./frontend/build ./build
+COPY ./build ./build
 
 EXPOSE 3000
 
