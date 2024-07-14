@@ -9,7 +9,7 @@ Basic Google Clone application with text editor and real time editing/viewing wi
 - styled is only applicable on MUI components
 - The return in useEffect is a cleanup function for any event listeners and such that should be turned off after the effect runs to prevent leaks. If you're not setting event listeners, canceling asynchronous requests or you don't have any resources to clean up then you don't need anything in the return. You should put your code/function calls before the return function.
 - new ids are generated using react - uuid
-
+- await is usually used to unwrap promises by passing a Promise as the expression. Using await pauses the execution of its surrounding async function until the promise is settled (that is, fulfilled or rejected). When execution resumes, the value of the await expression becomes that of the fulfilled promise.
 
 ### backend
 - "type": "module" added to json file to import and export packages 
